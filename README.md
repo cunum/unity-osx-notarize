@@ -4,7 +4,7 @@
 
 Provides you with a simple in-editor interface to notarize osx apps, needed for macOS Catalina compatibility.
 
-![Screenshot](unity-notarization.png)
+![Screenshot](unity-notarization.png) <!-- .element height="50%" width="50%" -->
 
 ## How to use
 
