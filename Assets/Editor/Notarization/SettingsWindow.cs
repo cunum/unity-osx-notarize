@@ -152,10 +152,11 @@ namespace Notarization {
             {
                 var prop = SerializedSettings.FindProperty("file");
                 NotarizationProcessor.Staple(prop.stringValue);
+                EditorUtility.DisplayDialog("Stapling successful", "Notarization process complete, you can now distribute the app", "Close");
             }
             catch (Exception e)
             {
-                EditorUtility.DisplayDialog("Stapling error", e.Message, "Close");
+                EditorUtility.DisplayDialog("Stapling failed", e.Message, "Close");
             }
         }
 
