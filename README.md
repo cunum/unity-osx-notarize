@@ -14,7 +14,7 @@ Provides you with a simple in-editor interface to notarize osx apps, needed for 
 
 ### Automatic notarize
 Enable auto notarization on each new OSX build by marking checkbox "Auto Notarize On OSX Build".
-This will sign each new OSX built (BuildTarget: StandaloneOSX) automatically and send it to the Apple notarization service. 
+This will sign each new OSX build (with BuildTarget: StandaloneOSX) automatically and send it to the Apple notarization service. 
 
 Be aware, this will not automatically staple the resulting ticket to the build, this has to be done manually after receiving the success mail from Apple.
 
