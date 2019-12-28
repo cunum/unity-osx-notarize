@@ -11,8 +11,8 @@ namespace Notarization
     {
 
         static string scriptBase = Directory.GetCurrentDirectory() + "/Assets/Editor/Notarization/script/";
-        static string stapleScript = "staple-unity.sh";
-        static string notarizationScript = "notarization-unity.sh";
+        static string stapleScriptPath = "\"" + scriptBase + "staple-unity.sh" + "\"";
+        static string notarizationScriptPath = "\"" + scriptBase + "notarization-unity.sh" + "\"";
 
         public static string lastBuildFile;
 
@@ -39,7 +39,7 @@ namespace Notarization
             string basePath = Path.GetDirectoryName(path);
             string arguments = " \"" + string.Join("\" \"", basePath, fileNameWithoutExtension) + "\"";
 
-            string output = Process(scriptBase + stapleScript + arguments);
+            string output = Process(stapleScriptPath + arguments);
 
             if (output.Contains("The staple and validate action failed"))
             {
@@ -64,9 +64,7 @@ namespace Notarization
             string basePath = Path.GetDirectoryName(path);
             string arguments = " \"" + string.Join("\" \"",settings.user, SettingsWindow.password, basePath, fileNameWithoutExtension, settings.certId, settings.bundleId) + "\"";
 
-            Process(scriptBase + notarizationScript + arguments);
-
-            UnityEngine.Debug.Log("Notarization finished");
+            Process(notarizationScriptPath + arguments);
         }
 
         private static string Process(string arguments)
