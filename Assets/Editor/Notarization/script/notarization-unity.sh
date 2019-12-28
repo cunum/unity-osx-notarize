@@ -13,7 +13,7 @@ echo "Bundle: $BUNDLE"
 
 echo "code signing"
 
-/usr/bin/codesign --deep --force --verify --verbose --timestamp --options runtime --entitlements $(/usr/bin/dirname "$0")/entitlements.xml --sign "$DEVELOPER_CERT_ID" "$PATH/${NAME}.app"
+/usr/bin/codesign --deep --force --verify --verbose --timestamp --options runtime --entitlements "$(/usr/bin/dirname "$0")/entitlements.xml" --sign "$DEVELOPER_CERT_ID" "$PATH/${NAME}.app"
 
 echo "zipping"
 
