@@ -17,7 +17,7 @@ echo "code signing"
 
 echo "zipping"
 
-/usr/bin/zip -r "$PATH/archive.zip" "$PATH/${NAME}.app"
+/usr/bin/zip -r -y "$PATH/archive.zip" "$PATH/${NAME}.app"
 
 echo "uploading to notarization service"
 
