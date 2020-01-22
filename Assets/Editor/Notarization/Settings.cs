@@ -9,6 +9,8 @@ namespace Notarization {
         public string bundleId;
         public string file;
         public bool autoNotarizeOnOSXBuild;
-
+        public bool blockUntilFinished = true;
+        public bool mono = true;
+        public bool steamOverlay = false;
     }
 }

@@ -4,6 +4,7 @@ PATH=$3
 NAME=$4
 DEVELOPER_CERT_ID=$5
 BUNDLE=$6
+ENTITLEMENTS_FILE=$7
 
 echo "User: $USER"
 echo "PATH: $PATH"
@@ -13,7 +14,7 @@ echo "Bundle: $BUNDLE"
 
 echo "code signing"
 
-/usr/bin/codesign --deep --force --verify --verbose --timestamp --options runtime --entitlements "$(/usr/bin/dirname "$0")/entitlements.xml" --sign "$DEVELOPER_CERT_ID" "$PATH/${NAME}.app"
+/usr/bin/codesign --deep --force --verify --verbose --timestamp --options runtime --entitlements "$(/usr/bin/dirname "$0")/${ENTITLEMENTS_FILE}" --sign "$DEVELOPER_CERT_ID" "$PATH/${NAME}.app"
 
 echo "zipping"
 

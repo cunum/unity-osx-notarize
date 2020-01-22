@@ -10,6 +10,9 @@ namespace Notarization {
     public class SettingsWindow : EditorWindow {
 
         public static string password;
+        public static NotarizationStatus status;
+
+        private string requestUUID = "";
 
         Settings _settings;
         Settings Settings {
@@ -69,7 +72,7 @@ namespace Notarization {
             SerializedSettings.Update();
 
             GUILayout.Label ("OSX Build Notarization Settings", EditorStyles.boldLabel);
-         
+
             EditorGUILayout.PropertyField(SerializedSettings.FindProperty("user"));
             EditorGUILayout.Space();
 
@@ -92,7 +95,23 @@ namespace Notarization {
 
             EditorGUILayout.Space();
 
+            EditorGUILayout.Space();
+
+            GUILayout.Label ("Entitlement options", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(SerializedSettings.FindProperty("mono"));
+            EditorGUILayout.PropertyField(SerializedSettings.FindProperty("steamOverlay"));
+
+            EditorGUILayout.Space();
+
+            GuiLine();
+
+            GUILayout.Label ("Auto notarize options", EditorStyles.boldLabel);
+
             EditorGUILayout.PropertyField(SerializedSettings.FindProperty("autoNotarizeOnOSXBuild"));
+
+            EditorGUILayout.Space();
+
+            EditorGUILayout.PropertyField(SerializedSettings.FindProperty("blockUntilFinished"));
 
             EditorGUILayout.Space();
 
@@ -141,6 +160,38 @@ namespace Notarization {
                 Staple();
             }
 
+            EditorGUILayout.Space();
+
+            GUILayout.Label("Notarization status", EditorStyles.boldLabel);
+
+            if (GUILayout.Button("Get last status", ActionButtonStyle, GUILayout.MinHeight(30)))
+            {
+                NotarizationStatus();
+            }
+
+            if (status != null)
+            {
+                EditorGUILayout.Space();
+                GUILayout.Label("Last Request: " + status.id, EditorStyles.label);
+                GUILayout.Label("Date: " + status.dateTime, EditorStyles.label);
+                GUILayout.Label("Status: " + (status.success ? "Successful" : "Failed"), EditorStyles.label);
+                GUILayout.TextArea(status.url, EditorStyles.label);
+            }
+
+            EditorGUILayout.Space();
+
+            GUILayout.Label("Notarized file valid", EditorStyles.boldLabel);
+
+            if (GUILayout.Button("Validate notarized file", ActionButtonStyle, GUILayout.MinHeight(30)))
+            {
+                ValidateFile();
+            }
+
+            // GUIContent label = GUI.Label(yourLabelRect, status.url, EditorStyles.linkLabel);
+            // Rect yourLabelRect = GUILayoutUtility.GetRect(status.url, EditorStyles.linkLabel);
+            // if (Event.current.type == EventType.MouseUp && yourLabelRect.Contains(Event.current.mousePosition))
+            //     Application.OpenURL(status.url);
+
             // This applies any changes to the underlying asset and marks dirty if needed
             // this is what ensures the asset gets saved
             SerializedSettings.ApplyModifiedProperties();
@@ -160,6 +211,20 @@ namespace Notarization {
             }
         }
 
+        void ValidateFile()
+        {
+            try
+            {
+                var prop = SerializedSettings.FindProperty("file");
+                NotarizationProcessor.ValidateFile(prop.stringValue);
+                EditorUtility.DisplayDialog("Validation successful", "File successfully notarized", "Close");
+            }
+            catch (Exception e)
+            {
+                EditorUtility.DisplayDialog("Validation failed", e.Message, "Close");
+            }
+        }
+
         void Notarize()
         {
 
@@ -169,6 +234,17 @@ namespace Notarization {
                 NotarizationProcessor.Notarize(prop.stringValue);
             } catch (Exception e) {
                 EditorUtility.DisplayDialog("Notarize error", e.Message, "Close");
+            }
+        }
+
+        void NotarizationStatus()
+        {
+
+            try
+            {
+                NotarizationProcessor.GetLastNotarizationStatus();
+            } catch (Exception e) {
+                EditorUtility.DisplayDialog("Fetch error", e.Message, "Close");
             }
         }
     }

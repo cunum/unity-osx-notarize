@@ -4,8 +4,7 @@ NAME=$2
 echo "PATH: $PATH"
 echo "NAME: $NAME"
 
-echo "stapling ticket"
+echo "file validation"
 
-/usr/bin/xcrun stapler staple -v "$PATH/${NAME}.app"
 /usr/sbin/spctl -a -v "$PATH/${NAME}.app"
 /usr/bin/codesign --test-requirement="=notarized" --verify --verbose "$PATH/${NAME}.app"
