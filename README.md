@@ -26,11 +26,11 @@ Manually staple a ticket to the app bundle by selecting it via file picker, and 
 This has to be done after receiving the success mail from Apple notarization service.
 
 ### Manual fetch notarization status
-Manually fetch the last notarization status from notarization service by selecting it via file picker and clicking on "Get last status" button. 
+Manually fetch the last notarization status from notarization service by clicking the "Get last status" button. 
 This can be useful when notarization email from Apple says failed, to get the notarization error report url.
 
 ### Manual validate file
-Manually validate the notarized file (after stapling!) by selecting it via file picker and clicking on "Validate notarized file" button.
+Manually validate the notarized file (should be done after stapling!) by selecting the file via file picker and clicking on the "Validate notarized file" button.
 
 ## Notes
 
