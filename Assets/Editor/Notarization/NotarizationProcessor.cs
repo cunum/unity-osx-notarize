@@ -6,18 +6,18 @@ using System.Diagnostics;
 using UnityEditor.Build;
 using Debug = UnityEngine.Debug;
 #if UNITY_2018_1_OR_NEWER
-	using UnityEditor.Build.Reporting;
+using UnityEditor.Build.Reporting;
 #else
-	using UnityEditor.Callbacks;
+using UnityEditor.Callbacks;
 #endif
 
 namespace Notarization
 {
 
 	#if UNITY_2018_1_OR_NEWER
-    	public class NotarizationProcessor: IPostprocessBuildWithReport
+    public class NotarizationProcessor: IPostprocessBuildWithReport
 	#else
-    	public class NotarizationProcessor
+    public class NotarizationProcessor
 	#endif
     {
 
@@ -46,6 +46,16 @@ namespace Notarization
                 }
             }
         }
+        
+        private bool isOSXBuild(BuildReport report)
+        {
+            return report.summary.platform == BuildTarget.StandaloneOSX;
+        }
+
+        private bool isDevelopmentBuild(BuildReport report)
+        {
+            return (report.summary.options & BuildOptions.Development) != 0;
+        }
 
 		#else
 
@@ -64,16 +74,6 @@ namespace Notarization
         }
 
 		#endif
-
-        private bool isOSXBuild(BuildReport report)
-        {
-            return report.summary.platform == BuildTarget.StandaloneOSX;
-        }
-
-        private bool isDevelopmentBuild(BuildReport report)
-        {
-            return (report.summary.options & BuildOptions.Development) != 0;
-        }
 
         public static void Staple(string path)
         {
