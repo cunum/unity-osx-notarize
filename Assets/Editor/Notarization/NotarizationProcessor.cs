@@ -4,13 +4,21 @@ using System.IO;
 using UnityEditor;
 using System.Diagnostics;
 using UnityEditor.Build;
-using UnityEditor.Build.Reporting;
 using Debug = UnityEngine.Debug;
+#if UNITY_2018_1_OR_NEWER
+	using UnityEditor.Build.Reporting;
+#else
+	using UnityEditor.Callbacks;
+#endif
 
 namespace Notarization
 {
 
-    public class NotarizationProcessor: IPostprocessBuildWithReport
+	#if UNITY_2018_1_OR_NEWER
+    	public class NotarizationProcessor: IPostprocessBuildWithReport
+	#else
+    	public class NotarizationProcessor
+	#endif
     {
 
         static string scriptBase = Directory.GetCurrentDirectory() + "/Assets/Editor/Notarization/script/";
@@ -21,6 +29,8 @@ namespace Notarization
         static string notarizedFileValidationScriptPath = string.Concat("\"", scriptBase, "notarized-file-validation-unity.sh", "\"");
 
         public static string lastBuildFile;
+
+		#if UNITY_2018_1_OR_NEWER
 
         public int callbackOrder => Int32.MaxValue;
 
@@ -36,6 +46,24 @@ namespace Notarization
                 }
             }
         }
+
+		#else
+
+		[PostProcessBuild(Int32.MaxValue)]
+        public static void OnPostprocessBuild(BuildTarget target, string pathToBuiltProject)
+        {
+            if (target == BuildTarget.StandaloneOSX)
+            {
+                lastBuildFile = pathToBuiltProject;
+                Settings settings = Storage.LoadOrCreateSettings();
+                if (settings.autoNotarizeOnOSXBuild)
+                {
+                    Notarize(pathToBuiltProject);
+                }
+            }
+        }
+
+		#endif
 
         private bool isOSXBuild(BuildReport report)
         {
